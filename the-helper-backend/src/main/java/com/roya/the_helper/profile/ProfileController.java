@@ -1,5 +1,6 @@
 package com.roya.the_helper.profile;
 
+import com.roya.the_helper.common.SearchFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +36,8 @@ public class ProfileController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Profile deleted successfully");
     }
 
-    @GetMapping("/{profileId}")
-    public ResponseEntity<List<ProfileEntity>> searchProfile(@RequestParam Map<Integer, String> filters) {
+    @GetMapping
+    public ResponseEntity<List<ProfileEntity>> searchProfile(@RequestBody Map<String, String> filters) {
         return ResponseEntity.ok(profileService.searchProfile(filters));
     }
 }
