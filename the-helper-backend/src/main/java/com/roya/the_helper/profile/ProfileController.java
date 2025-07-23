@@ -1,6 +1,5 @@
 package com.roya.the_helper.profile;
 
-import com.roya.the_helper.common.SearchFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,5 +1,6 @@
 package com.roya.the_helper.profile;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -10,6 +11,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "profiles")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+@ToString
 public class ProfileEntity {
     @Id
     private String profileId = UUID.randomUUID().toString();
@@ -22,4 +24,8 @@ public class ProfileEntity {
     private String description;
     private Long contact;
 
+    @JsonIgnore
+    public String getPassword() {
+        return password;
+    }
 }
