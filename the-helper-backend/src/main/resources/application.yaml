@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: the-helper
+  datasource:
+    url: jdbc:mysql://localhost:3306/helper?useSSL=false&serverTimezone=UTC
+    username: root
+    password: _Imtheking007!
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
