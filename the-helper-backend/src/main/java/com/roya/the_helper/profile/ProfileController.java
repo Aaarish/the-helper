@@ -11,11 +11,12 @@ import java.util.Map;
 @RestController
 @RequestMapping("/profile")
 @RequiredArgsConstructor
+//@CrossOrigin("*")
 public class ProfileController {
     private final ProfileService profileService;
 
     @PostMapping("/register")
-    public ResponseEntity<ProfileEntity> registerProfile(@RequestBody ProfileEntity profile) {
+    public ResponseEntity<ProfileEntity> createProfile(@RequestBody ProfileEntity profile) {
         return ResponseEntity.status(HttpStatus.CREATED).body(profileService.createProfile(profile));
     }
 
@@ -35,7 +36,7 @@ public class ProfileController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Profile deleted successfully");
     }
 
-    @GetMapping
+    @PutMapping
     public ResponseEntity<List<ProfileEntity>> searchProfile(@RequestBody Map<String, String> filters) {
         return ResponseEntity.ok(profileService.searchProfile(filters));
     }

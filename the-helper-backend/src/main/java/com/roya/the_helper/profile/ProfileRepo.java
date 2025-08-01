@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProfileRepo extends JpaRepository<ProfileEntity, String> {
@@ -12,4 +13,6 @@ public interface ProfileRepo extends JpaRepository<ProfileEntity, String> {
     List<ProfileEntity> findByLocality(String locality);
 
     List<ProfileEntity> findByName(String name);
+
+    Optional<ProfileEntity> findByUsername(String username);
 }

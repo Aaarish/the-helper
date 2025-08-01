@@ -3,6 +3,7 @@ package com.roya.the_helper.profile;
 import com.roya.the_helper.common.SearchFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,18 +21,13 @@ public class ProfileServiceImpl implements ProfileService {
 
         if (!isProfileDataValid(profile)) throw new RuntimeException("Invalid profile data");
 
-        ProfileEntity profileEntity = ProfileEntity.builder()
-                .profileId(profile.getProfileId())
-                .password(profile.getPassword())
-                .name(profile.getName().toLowerCase())
-                .profession(profile.getProfession().toLowerCase())
-                .locality(profile.getLocality().toLowerCase())
-                .description(profile.getDescription().toLowerCase())
-                .contact(profile.getContact())
-                .build();
+        profile.setName(profile.getName().toLowerCase());
+        profile.setName(profile.getProfession().toLowerCase());
+        profile.setName(profile.getLocality().toLowerCase());
+        profile.setName(profile.getDescription().toLowerCase());
 
-        log.info("creating profile with profile id: {}", profileEntity.getProfileId());
-        return profileRepo.save(profileEntity);
+        log.info("creating profile with profile id: {}", profile.getProfileId());
+        return profileRepo.save(profile);
     }
 
     private boolean isProfileDataValid(ProfileEntity profile) {

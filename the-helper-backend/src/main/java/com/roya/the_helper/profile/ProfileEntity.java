@@ -1,12 +1,11 @@
 package com.roya.the_helper.profile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.*;
-
-import java.util.UUID;
 
 @Entity
 @Table(name = "profiles")
@@ -14,7 +13,9 @@ import java.util.UUID;
 @ToString
 public class ProfileEntity {
     @Id
-    private String profileId = UUID.randomUUID().toString();
+    @JsonProperty("id")
+    private String profileId;
+    private String username;
     private String password;
 
     // functional fields
