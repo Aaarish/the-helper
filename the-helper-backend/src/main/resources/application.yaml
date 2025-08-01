@@ -13,6 +13,24 @@ spring:
     hibernate:
       ddl-auto: update
 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 81256949839-aplub2ormepl40knakini9vritl77r5n.apps.googleusercontent.com
+            client-secret: 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
+            scope: oidc, profile, email
+#            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+        provider:
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/auth
+            token-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+
+rsa:
+  private-key: classpath:certs/private-key.pem
+  public-key: classpath:certs/public-key.pem
 
 #logging:
 #  level:

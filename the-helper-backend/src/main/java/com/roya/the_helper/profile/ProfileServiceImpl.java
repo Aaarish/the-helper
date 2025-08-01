@@ -22,9 +22,9 @@ public class ProfileServiceImpl implements ProfileService {
         if (!isProfileDataValid(profile)) throw new RuntimeException("Invalid profile data");
 
         profile.setName(profile.getName().toLowerCase());
-        profile.setName(profile.getProfession().toLowerCase());
-        profile.setName(profile.getLocality().toLowerCase());
-        profile.setName(profile.getDescription().toLowerCase());
+        profile.setLocality(profile.getLocality().toLowerCase());
+        profile.setDescription(profile.getDescription().toLowerCase());
+        profile.setProfession(profile.getProfession().toLowerCase());
 
         log.info("creating profile with profile id: {}", profile.getProfileId());
         return profileRepo.save(profile);

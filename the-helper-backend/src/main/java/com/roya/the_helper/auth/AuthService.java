@@ -4,6 +4,7 @@ import com.roya.the_helper.profile.ProfileEntity;
 import com.roya.the_helper.profile.ProfileRepo;
 import com.roya.the_helper.profile.ProfileService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -34,7 +36,7 @@ public class AuthService {
         ProfileEntity profile = profileService.createProfile(profileRequest);
 
         return this.authenticate(AuthDto.AuthRequest.builder()
-                .username(registerRequest.getName())
+                .username(profile.getUsername())
                 .password(registerRequest.getPassword())
                 .build(), profile);
     }
@@ -45,8 +47,9 @@ public class AuthService {
                 .username(registerRequest.getName()+"."+registerRequest.getContact())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .name(registerRequest.getName())
-                .contact(registerRequest.getContact())
                 .locality(registerRequest.getLocality())
+                .profession(registerRequest.getProfession())
+                .contact(registerRequest.getContact())
                 .description(registerRequest.getDescription())
                 .build();
     }

@@ -20,7 +20,7 @@ public class ProfileController {
         return ResponseEntity.status(HttpStatus.CREATED).body(profileService.createProfile(profile));
     }
 
-    @GetMapping("/{profileId}")
+    @GetMapping("/open/{profileId}")
     public ResponseEntity<ProfileEntity> getProfile(@PathVariable String profileId) {
         return ResponseEntity.ok(profileService.getProfile(profileId));
     }
@@ -36,7 +36,7 @@ public class ProfileController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Profile deleted successfully");
     }
 
-    @PutMapping
+    @PutMapping("/open")
     public ResponseEntity<List<ProfileEntity>> searchProfile(@RequestBody Map<String, String> filters) {
         return ResponseEntity.ok(profileService.searchProfile(filters));
     }

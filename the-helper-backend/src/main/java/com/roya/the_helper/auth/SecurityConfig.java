@@ -36,8 +36,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final RSAKeyConfigProperties keyConfigProperties;
     private final ProfileRepo profileRepo;
+    private final RSAKeyConfigProperties keyConfigProperties;
 
     private static final List<String> WHITELIST_ORIGINS = List.of("http://localhost:5173");
 
@@ -61,7 +61,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/auth/login", "/auth/signup", "/profile").permitAll()
+                                .requestMatchers("/auth/login", "/auth/signup", "/profile/open/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
