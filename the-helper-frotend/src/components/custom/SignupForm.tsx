@@ -4,47 +4,46 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import { useSignup } from "./auth/SignupContext"
 
-const formSchema = z.object({
+const signupFormSchema = z.object({
     name: z.string().min(1, "Name is required"),
     profession: z.string().min(1, "Profession is required"),
     locality: z.string().min(1, "Locality is required"),
     contact: z.string().min(1, "Contact is required"),
-    description: z.string().optional()
+    description: z.string().optional(),
 })
 
-type SignupFormData = z.infer<typeof formSchema>
+export type SignupFormData = z.infer<typeof signupFormSchema>
 
 type Props = {
     initialValues?: Partial<SignupFormData>
-    onSubmit?: (data: SignupFormData) => void
+    // onSubmit?: (data: SignupFormData) => void
 }
 
-export const SignupForm: React.FC<Props> = ({ initialValues = {}, onSubmit }) => {
+export const SignupForm: React.FC<Props> = ({ initialValues = {} }) => {
     const {
         register,
         handleSubmit,
-        reset,
+        // reset,
         formState: { errors }
     } = useForm<SignupFormData>({
-        resolver: zodResolver(formSchema),
+        resolver: zodResolver(signupFormSchema),
         defaultValues: initialValues
     })
 
+    const { setSignupData } = useSignup()
     const nav = useNavigate()
 
-    const handleFormSubmit = (data: SignupFormData) => {
-        onSubmit?.(data)
-    }
+    // const handleClear = () => {
+    //     reset()
+    // }
 
-    const handleClear = () => {
-        reset()
-    }
-
-    const handleNext = () => {
+    const onSubmit = (data: SignupFormData) => {
+        setSignupData(data)
         nav("/signup/password")
     }
 
@@ -54,7 +53,7 @@ export const SignupForm: React.FC<Props> = ({ initialValues = {}, onSubmit }) =>
                 <CardTitle className="text-center"><strong>The Helper</strong></CardTitle>
             </CardHeader>
             <CardContent>
-                <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     <div className="space-y-2">
                         <Label htmlFor="name">Name</Label>
                         <Input id="name" {...register("name")} required />
@@ -84,14 +83,17 @@ export const SignupForm: React.FC<Props> = ({ initialValues = {}, onSubmit }) =>
                         <Textarea id="description" rows={6} {...register("description")} />
                     </div>
 
-                    <div className="flex justify-end gap-4 pt-4">
-                        <Button className="cursor-pointer" type="button" onClick={handleNext}>Next</Button>
-                        <Button className="cursor-pointer" type="button" variant="outline" onClick={handleClear}>
+                    <div className="flex justify-center gap-4 pt-4">
+                        <Button className="cursor-pointer" type="submit">Next</Button>
+                        {/* <Button className="cursor-pointer" type="button" variant="outline" onClick={handleClear}>
                             Clear
-                        </Button>
+                        </Button> */}
                     </div>
                 </form>
             </CardContent>
-        </Card>
+            <CardFooter>
+                <p className="text-sm text-center text-gray-500">Already have an account? <Link to="/login" className="text-blue-500 hover:underline">Login</Link></p>
+            </CardFooter>
+        </Card >
     )
 }

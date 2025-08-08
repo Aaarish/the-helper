@@ -1,10 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useEffect, useState } from "react"
-import { Input } from "@/components/ui/input"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import type { ProfileData } from "../ProfileList"
 import axiosInstance from "../api/base"
+import { Button } from "@/components/ui/button"
 
 const initialData: ProfileData = {
     id: "1",
@@ -20,7 +20,8 @@ const ProfileView = () => {
     const { id } = useParams()
 
     const [profile, setProfile] = useState<ProfileData>(initialData)
-    const [isEditable, setEditable] = useState(false)
+
+    const nav = useNavigate()
 
     useEffect(() => {
         (async () => {
@@ -29,8 +30,8 @@ const ProfileView = () => {
         })()
     }, [])
 
-    const toggleEditable = () => {
-        setEditable(prev => !prev)
+    const handleDetails = () => {
+        nav('/project')
     }
 
     return (
@@ -42,9 +43,7 @@ const ProfileView = () => {
                         <AvatarFallback className="text-5xl text-center">{profile.name.toUpperCase()?.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <CardTitle className="text-2xl font-bold">
-                        <button onClick={toggleEditable}>
-                            {isEditable ? <Input id="name" value={profile.name} onChange={(e) => e.target.value} /> : <p>{profile.name}</p>}
-                        </button>
+                        <p>{profile.name}</p>
                     </CardTitle>
                     <p className="text-gray-500">{profile.profession}</p>
                 </CardHeader>
@@ -60,6 +59,9 @@ const ProfileView = () => {
                     <div>
                         <p className="text-sm font-semibold text-gray-400">Description</p>
                         <p className="text-base text-gray-800 whitespace-pre-line">{profile.description}</p>
+                    </div>
+                    <div>
+                        <Button variant={'outline'} className="cursor-pointer" onClick={handleDetails}>Details</Button>
                     </div>
                 </CardContent>
             </Card>

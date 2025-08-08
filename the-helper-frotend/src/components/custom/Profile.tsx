@@ -33,7 +33,7 @@ const Profile: React.FC<ProfileProps> = ({
 
     return (
         <Card className="w-full max-w-sm shadow-xl rounded-2xl border border-gray-200">
-            <Link to={`/profile/${id}`} className="no-underline">
+            <Link to={`/profiles/${id}`} className="no-underline">
                 <CardHeader className="flex flex-row items-center gap-4">
                     <Avatar>
                         <AvatarImage src={avatarUrl} alt={name} />

@@ -6,31 +6,51 @@ import { Label } from '../ui/label'
 import { z } from "zod"
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useAuth } from './auth/AuthContext'
+import { useMutation } from '@tanstack/react-query'
+import axiosInstance from './api/base'
+import { useSignup } from './auth/SignupContext'
 
-const formSchema = z.object({
+const passwordFormSchema = z.object({
     password: z.string().min(1, "Password is required"),
     confirmPassword: z.string().min(2, "Password is required"),
+}).refine(data => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"]
 })
 
-type SignupFormData = z.infer<typeof formSchema>
+type PasswordSignupFormData = z.infer<typeof passwordFormSchema>
 
-type Props = {
-    initialValues?: Partial<SignupFormData>
-    onSubmit?: (data: SignupFormData) => void
-}
-
-const PasswordForm: React.FC<Props> = ({ initialValues = {}, onSubmit }) => {
+const PasswordForm: React.FC = () => {
     const {
         register,
         handleSubmit,
         formState: { errors }
-    } = useForm<SignupFormData>({
-        resolver: zodResolver(formSchema),
-        defaultValues: initialValues
+    } = useForm<PasswordSignupFormData>({
+        resolver: zodResolver(passwordFormSchema)
     })
 
-    const handleFormSubmit = (data: SignupFormData) => {
-        onSubmit?.(data)
+    const { signupData } = useSignup()
+    const { setAuth } = useAuth()
+
+    const signupMutation = useMutation({
+        mutationFn: async (passwordData: PasswordSignupFormData) => {
+            const completeData = { ...signupData, password: passwordData.password }
+            const response = await axiosInstance.post("/auth/signup", completeData)
+            return response.data
+        },
+        onSuccess: (data) => {
+            setAuth({ userId: data.userId, token: data.token })
+            window.location.href="/"
+        },
+        onError: (error) => {
+            console.error("Signup failed", error)
+            alert("Signup failed. Try again.")
+        }
+    })
+
+    const onSubmit = (data: PasswordSignupFormData) => {
+        signupMutation.mutate(data)
     }
 
     return (
@@ -39,7 +59,7 @@ const PasswordForm: React.FC<Props> = ({ initialValues = {}, onSubmit }) => {
                 <CardTitle className="text-center"><strong>The Helper</strong></CardTitle>
             </CardHeader>
             <CardContent>
-                <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     <div className="space-y-2">
                         <Label htmlFor="password">Password</Label>
                         <Input id="password" type='password' {...register("password")} required />
@@ -52,7 +72,9 @@ const PasswordForm: React.FC<Props> = ({ initialValues = {}, onSubmit }) => {
                         {errors.confirmPassword && <p className="text-sm text-red-500">{errors.confirmPassword.message}</p>}
                     </div>
                     <div className='text-center pt-4'>
-                        <Button className="cursor-pointer" type="button">Submit</Button>
+                        <Button className="cursor-pointer" type="submit" disabled={signupMutation.isPending}>
+                            {signupMutation.isPending ? "Submitting..." : "Submit"}
+                        </Button>
                     </div>
                 </form>
             </CardContent>
