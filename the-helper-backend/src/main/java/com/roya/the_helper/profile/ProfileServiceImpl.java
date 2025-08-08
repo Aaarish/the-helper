@@ -87,9 +87,12 @@ public class ProfileServiceImpl implements ProfileService {
         log.info("updating profile with profile id: {} with data: {}", profileId, profileData);
 
         if (profileData.getProfession() != null) originalProfile.setProfession(profileData.getProfession());
-        if (profileData.getContact() != null) originalProfile.setContact(profileData.getContact());
         if (profileData.getLocality() != null) originalProfile.setLocality(profileData.getLocality());
         if (profileData.getDescription() != null) originalProfile.setDescription(profileData.getDescription());
+        if (profileData.getContact() != null) {
+            originalProfile.setContact(profileData.getContact());
+            originalProfile.setUsername(profileData.getContact().toString());
+        }
 
         return profileRepo.save(originalProfile);
     }
@@ -101,5 +104,11 @@ public class ProfileServiceImpl implements ProfileService {
 
         log.info("deleting profile with profile id: {}", profileId);
         profileRepo.delete(profileEntity);
+    }
+
+    @Override
+    public ProfileEntity getProfileViaUsername(String username) {
+        return profileRepo.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("No profile found with username: " + username));
     }
 }

@@ -27,7 +27,7 @@ public class AuthService {
     private final ProfileRepo profileRepo;
 
     public AuthDto.AuthResponse authenticate(AuthDto.AuthRequest authRequest) {
-        ProfileEntity profile = profileService.getProfile(authRequest.getUsername());
+        ProfileEntity profile = profileService.getProfileViaUsername(authRequest.getUsername());
         return authenticate(authRequest, profile);
     }
 
@@ -44,7 +44,7 @@ public class AuthService {
     private ProfileEntity createProfileRequest(AuthDto.RegisterRequest registerRequest) {
         return ProfileEntity.builder()
                 .profileId(UUID.randomUUID().toString())
-                .username(registerRequest.getName()+"."+registerRequest.getContact())
+                .username(registerRequest.getContact().toString())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .name(registerRequest.getName())
                 .locality(registerRequest.getLocality())

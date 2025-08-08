@@ -9,5 +9,6 @@ public interface ProfileService {
     List<ProfileEntity> searchProfile(Map<String, String> filters);
     ProfileEntity updateProfile(String profileId, ProfileEntity profile);
     void deleteProfile(String profileId);
+    ProfileEntity getProfileViaUsername(String username);
 
 }
